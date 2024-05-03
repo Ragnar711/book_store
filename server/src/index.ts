@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import router from './routes/books';
 import { errorHandler } from './middlewares/error-handler';
 
@@ -20,6 +21,13 @@ mongoose
     });
 
 app.use(express.json());
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        allowedHeaders: ['Content-Type'],
+    })
+);
 
 app.use('/books', router);
 
