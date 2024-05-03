@@ -8,10 +8,10 @@ import { deleteBook } from '../controllers/deleteBook';
 
 const router: Router = Router();
 
-router.post('/books', asyncHandler(addBook));
-router.get('/books', asyncHandler(getBooks));
-router.get('/books/:id', asyncHandler(getBookById));
-router.put('/books/:id', asyncHandler(updateBook));
-router.delete('/books/:id', asyncHandler(deleteBook));
+router.post('/', asyncHandler(addBook));
+router.get('/', asyncHandler(getBooks));
+router.get('/:id', asyncHandler(getBookById));
+router.put('/:id', asyncHandler(updateBook));
+router.delete('/:id', asyncHandler(deleteBook));
 
 export default router;

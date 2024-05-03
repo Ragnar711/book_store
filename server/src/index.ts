@@ -21,7 +21,7 @@ mongoose
 
 app.use(express.json());
 
-app.use('/', router);
+app.use('/books', router);
 
 app.use(errorHandler);
 
