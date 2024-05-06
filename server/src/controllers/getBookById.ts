@@ -12,5 +12,5 @@ export const getBookById = async (
 
     if (!book) throw new NotFoundError(`Book with id ${id} not found`);
 
-    res.status(200).send(book);
+    res.status(200).json(book);
 };
