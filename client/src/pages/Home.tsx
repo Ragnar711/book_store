@@ -6,7 +6,7 @@ import AddBook from '../components/AddBook';
 
 const Home = () => {
     const { isPending, isError, data, error } = useQuery({
-        queryKey: ['todos'],
+        queryKey: ['books'],
         queryFn: getBooks,
     });
 
