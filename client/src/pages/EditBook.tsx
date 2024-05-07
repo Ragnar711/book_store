@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import BackButton from '../components/BackButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'redaxios';
 import { useSnackbar } from 'notistack';
@@ -11,12 +11,19 @@ const EditBook = () => {
     const [publishYear, setPublishYear] = useState(0);
 
     const { id } = useParams();
-
     const navigate = useNavigate();
 
     const { enqueueSnackbar } = useSnackbar();
 
     const queryClient = useQueryClient();
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/books/${id}`).then((res) => {
+            setTitle(res.data.title);
+            setAuthor(res.data.author);
+            setPublishYear(res.data.publishYear);
+        });
+    }, [id]);
 
     const mutation = useMutation({
         mutationFn: ({
