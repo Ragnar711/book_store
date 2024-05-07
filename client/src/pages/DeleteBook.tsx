@@ -1,22 +1,35 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import BackButton from '../components/BackButton';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'redaxios';
+import { useSnackbar } from 'notistack';
 
 const DeleteBook = () => {
     const { id } = useParams();
 
     const navigate = useNavigate();
 
+    const { enqueueSnackbar } = useSnackbar();
+
+    const queryClient = useQueryClient();
+
     const mutation = useMutation({
         mutationFn: () => {
             return axios.delete(`http://localhost:3000/books/${id}`);
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['books'] });
+            enqueueSnackbar('Book deleted successfully', {
+                variant: 'success',
+            });
+            navigate('/');
+        },
+        onError: () =>
+            enqueueSnackbar('Failed to delete book', { variant: 'error' }),
     });
 
-    const handleDeleteBook = async () => {
+    const handleDeleteBook = () => {
         mutation.mutate();
-        navigate('/');
     };
 
     return (

@@ -1,8 +1,9 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import BackButton from '../components/BackButton';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'redaxios';
+import { useSnackbar } from 'notistack';
 
 const EditBook = () => {
     const [title, setTitle] = useState('');
@@ -12,6 +13,10 @@ const EditBook = () => {
     const { id } = useParams();
 
     const navigate = useNavigate();
+
+    const { enqueueSnackbar } = useSnackbar();
+
+    const queryClient = useQueryClient();
 
     const mutation = useMutation({
         mutationFn: ({
@@ -29,11 +34,19 @@ const EditBook = () => {
                 publishYear,
             });
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['books'] });
+            enqueueSnackbar('Book edited successfully', {
+                variant: 'success',
+            });
+            navigate('/');
+        },
+        onError: () =>
+            enqueueSnackbar('Failed to edit book', { variant: 'error' }),
     });
 
-    const handleEditBook = async () => {
+    const handleEditBook = () => {
         mutation.mutate({ title, author, publishYear });
-        navigate('/');
     };
 
     return (
