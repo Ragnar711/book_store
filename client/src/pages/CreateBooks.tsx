@@ -1,38 +1,43 @@
 import BackButton from '../components/BackButton';
-import Spinner from '../components/Spinner';
-import axios from 'redaxios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'redaxios';
 
 const CreateBooks = () => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [publishYear, setPublishYear] = useState(0);
-    const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate();
-
-    const handleCreateBook = async () => {
-        setLoading(true);
-        try {
-            await axios.post('http://localhost:3000/books', {
+    const mutation = useMutation({
+        mutationFn: ({
+            title,
+            author,
+            publishYear,
+        }: {
+            title: string;
+            author: string;
+            publishYear: number;
+        }) => {
+            return axios.post('http://localhost:3000/books', {
                 title,
                 author,
                 publishYear,
             });
-            navigate('/');
-            // eslint-disable-next-line
-        } catch (error: any) {
-            alert(error.data.errors[0].message);
-            setLoading(false);
-        }
+        },
+    });
+
+    const navigate = useNavigate();
+
+    const handleCreateBook = async () => {
+        mutation.mutate({ title, author, publishYear });
+        navigate('/');
     };
 
     return (
         <div className="p-4">
             <BackButton />
             <h1 className="text-3xl my-4">Create Book</h1>
-            {loading ? <Spinner /> : ''}
             <div className="flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-4 mx-auto">
                 <div className="my-4">
                     <label
