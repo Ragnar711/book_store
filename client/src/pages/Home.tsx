@@ -1,10 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { getBooks } from '../apis/getBooks';
 import Spinner from '../components/Spinner';
-import BooksTable from '../components/BooksTable';
+import BooksTable from '../components/home/BooksTable';
+import BooksCard from '../components/home/BooksCard';
 import AddBook from '../components/AddBook';
+import { useState } from 'react';
+import { IBook } from '../types/book';
 
 const Home = () => {
+    const [showType, setShowType] = useState('table');
+
     const { isPending, isError, data, error } = useQuery({
         queryKey: ['books'],
         queryFn: getBooks,
@@ -26,11 +31,31 @@ const Home = () => {
         );
     }
 
+    const books: IBook[] = data.data;
+
     return (
         <div className="p-4">
+            <div className="flex justify-center items-center gap-x-4">
+                <button
+                    className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg"
+                    onClick={() => setShowType('table')}
+                >
+                    Table
+                </button>
+                <button
+                    className="bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg"
+                    onClick={() => setShowType('card')}
+                >
+                    Card
+                </button>
+            </div>
             <div className="flext justify-between items-center">
                 <AddBook />
-                <BooksTable data={data.data} />
+                {showType === 'table' ? (
+                    <BooksTable books={books} />
+                ) : (
+                    <BooksCard books={books} />
+                )}
             </div>
         </div>
     );

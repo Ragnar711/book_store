@@ -1,10 +1,10 @@
-import { IBook } from '../types/book';
+import { IBook } from '../../types/book';
 import { Link } from 'react-router-dom';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineDelete } from 'react-icons/md';
 
-const BooksTable = ({ data }: { data: IBook[] }) => {
+const BooksTable = ({ books }: { books: IBook[] }) => {
     return (
         <table className="w-full border-separate border-spacing-2">
             <thead>
@@ -25,7 +25,7 @@ const BooksTable = ({ data }: { data: IBook[] }) => {
                 </tr>
             </thead>
             <tbody>
-                {data.map((book: IBook, index: number) => (
+                {books.map((book: IBook, index: number) => (
                     <tr key={book._id} className="h-8">
                         <td className="border border-slate-700 rounded-md text-center">
                             {index + 1}
